@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" output="pubapp/classes" path="pubapp/src/public"/>
+	<classpathentry kind="src" output="pubapp/classes" path="pubapp/src/client"/>
+	<classpathentry kind="src" output="pubapp/classes" path="pubapp/src/private"/>
+	<classpathentry kind="src" output="pubapp/classes" path="pubapp/src/test"/>
+	<classpathentry kind="src" output="pubapp/classes" path="pubapp/resources"/>
 	<classpathentry kind="src" output="ic/classes" path="ic/src/public"/>
 	<classpathentry kind="src" output="ic/classes" path="ic/src/client"/>
 	<classpathentry kind="src" output="ic/classes" path="ic/src/private"/>

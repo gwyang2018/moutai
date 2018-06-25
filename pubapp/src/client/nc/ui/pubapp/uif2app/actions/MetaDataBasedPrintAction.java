@@ -7,7 +7,9 @@ import java.util.List;
 import nc.bs.framework.common.NCLocator;
 import nc.itf.bd.printcheck.IPrintLog;
 import nc.ui.bd.print.printlog.Printlistenner;
+import nc.ui.ic.general.action.GeneralRefreshCardAction;
 import nc.ui.pub.print.IMetaDataDataSource;
+import nc.ui.uif2.model.AbstractAppModel;
 import nc.vo.pub.BusinessException;
 import nc.vo.trade.checkrule.VOChecker;
 import nc.vo.uif2.LoginContext;
@@ -92,18 +94,27 @@ public class MetaDataBasedPrintAction extends BaseMetaDataBasedPrintAction {
 
   @Override
   public void doAction(ActionEvent e) throws Exception {
+	// add by yanggwd at 2018-06-25
+	Object voObj = null;
+	
     if (this.getPrintEntry().selectTemplate() != 1) {
       return;
     }
     List<IMetaDataDataSource> list = new ArrayList<IMetaDataDataSource>();
     if (this.getDataSource() != null) {
       Object obj = this.getDataSource().getMDObjects();
+      // add by yanggwd at 2018-06-25
+      voObj = obj;
+      
       checkDataPermission(obj);// 权限校验
       this.printEntry.setDataSource(this.getDataSource());
       this.printEntry.setAdjustable(isAdjustable());
       list.add(this.getDataSource());
     } else {
       Object obj = getDatas();
+      // add by yanggwd at 2018-06-25
+      voObj = obj;
+      
       checkDataPermission(obj);// 权限校验
       IMetaDataDataSource[] defaultDataSource = this.getDefaultMetaDataSource();
       if (!VOChecker.isEmpty(defaultDataSource)) {
@@ -124,6 +135,14 @@ public class MetaDataBasedPrintAction extends BaseMetaDataBasedPrintAction {
     } else {
       this.printEntry.print();
     }
+    
+    // 采购入库单打印完毕后，刷新单据界面信息 add by yanggw at 2018-06-25 start
+    if(voObj != null && ((Object[])voObj).length > 0 && ((Object[])voObj)[0] instanceof nc.vo.ic.m45.entity.PurchaseInVO){
+    	GeneralRefreshCardAction action = new GeneralRefreshCardAction();
+    	action.setModel((AbstractAppModel) getModel());
+    	action.actionPerformed(e);
+    }
+    // 采购入库单打印完毕后，刷新单据界面信息 add by yanggw at 2018-06-25 end
   }
 
   /**
